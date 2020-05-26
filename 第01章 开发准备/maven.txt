@@ -1,0 +1,53 @@
+
+
+1-先在构造路径导入tomcat服务器
+2-pom.xml插入插件，统一开发和编译版本，编码
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	会有不兼容报错：
+		然后右击项目->maven->update maven configuration...
+		fore update of snapssots/Releases(强制更新)
+3-添加src/test/resources文件夹
+4-项目右键--Properties--Maven--Project Facets--Dynamic Web Moudule
+	 --修改Dynamic Web Moudule到对应JDK版本，Bug无法直接修改，通过项目目录
+	 --.settings--org.eclipse.wst.common.project.facet.core.xml
+	 --直接修改版本3.1--同时修改/src/main/webapp下的web.xml的约束
+		 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+								  http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+				version="3.1" metadata-complete="true">
+			  <display-name>Archetype Created Web Application</display-name>
+		 </web-app>
+			version="3.1"版本和Dynamic Web Moudule版本一致
+5-添加tomcat服务器，右键--Add and Remove
+  clean--start
+  http://localhost:8080/o2o//index.jsp  默认访问webapp下的index.jsp
+  
+6-http://localhost:8080/o2o/WEB-INF WEB-INF 中的资源无法被外部访问
+
+7-导入jar包，
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

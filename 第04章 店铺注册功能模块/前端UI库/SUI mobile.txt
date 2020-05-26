@@ -1,0 +1,61 @@
+
+1-地址：https://sui.ctolog.com/
+2-是一款轻量，小型，自适应的框架(适应各种终端屏幕大小)
+
+3-示例-表单-文案和输入框--右键查看源码--复制到src/main/webapp/index.html文件中
+4-开始使用-
+	 <!-- Google Web Fonts -->
+
+    <link rel="stylesheet"
+    	href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+	<link rel="stylesheet"
+   		href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+	<link rel="apple-touch-icon-precomposed"
+    	href="/assets/img/apple-touch-icon-114x114.png">
+
+    <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
+    <script>
+      //ga
+    </script>
+	
+	<!-- Google Web Fonts -->
+
+    <link rel="stylesheet"
+    	href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+	<link rel="stylesheet"
+   		href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+	<link rel="apple-touch-icon-precomposed"
+    	href="/assets/img/apple-touch-icon-114x114.png">
+
+    <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-114x114.png">
+    <script>
+      //ga
+    </script>
+	
+5-添加js和对应的Controller方法
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

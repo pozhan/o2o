@@ -1,0 +1,53 @@
+
+
+1-数据库层面的主从配置实现
+	 https://blog.csdn.net/qq_34629352/article/details/83376148
+	 在window上是my.ini
+
+2-代码层次的读写分离实现
+	 1.写是主库，读是从库
+	 2.Mybatis拦截器，实现读写分离
+	 3.在mybatis-config.xml配置
+		 <plugins>
+			<plugin interceptor="com.imooc.o2o.dao.split.DynamicDataSourceInterceptor"></plugin>
+		</plugins>
+     4.修改dao层的dataSource 
+	 <bean id="abstractDataSource" abstract="true" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+	 destroy-method="close"><!--destroy-method当数据库连接不使用的时候,就把该连接重新放到数据池中,方便下次使用调用.  -->
+	 
+	 <bean id="master" parent="abstractDataSource">
+	 <bean id="slave" parent="abstractDataSource">
+	 修改jdbc.properties中为jdbcUrl分别配置地址
+	 
+	 <!-- 配置动态数据源，这儿targetDataSource就是路由数据源所对应的名称 -->
+	 <bean id="dynamicDataSource" class="com.imooc.o2o.dao.split.DynamicDataSource">
+		<property name="targetDataSources">
+            <map>
+                <entry value-ref="master" key="master"></entry>
+                <entry value-ref="slave" key="slave"></entry>
+            </map>
+        </property>
+	  </bean>
+	   <!--延迟懒加载机制：是在mybatis生成sql语句时才去执行-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+        <property name="targetDataSource">
+            <ref bean="dynamicDatasource"/>
+        </property>
+    </bean>
+	
+	 5.在实现Mybatis拦截器类上添加注解
+	 @Intercepts({@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

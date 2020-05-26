@@ -1,0 +1,19 @@
+第13章 框架大换血
+微服务框架
+
+1-springBoot理论知识--约定优于配置
+	 整合其他第三方框架
+	 简化配置
+	 
+2-springBoot框架搭建
+	 1.使用专门开发工具：spring-tool-suite
+	 2.Version: 4.6.0.RELEASE
+
+3-把项目从SSM转移到springBoot
+	 1-pom
+	 2-去xml配置：spring-dao.xml spring-service.xml spring-web.xml
+		用代码的方式
+
+4-利用springBoot特性做修改
+
+5-快速部署

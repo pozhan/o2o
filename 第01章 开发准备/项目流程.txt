@@ -1,0 +1,25 @@
+项目：
+
+1-创建maven项目，并配置好tomcat和JDK版本等问题
+
+2-搭建SSM框架：
+	 1.pom文件中导入相关jar包，导入约束提示XML-Catalog
+	 2.数据库配置：jdbc.properties
+	 3.mybatis-config.xml通用配置
+	 4.配置spring-dao: 数据库连接-4步
+	 5.配置spring-service.xml：事务管理
+	 6.配置spring-web.xml：前端控制器
+	 
+
+3-验证三层结构
+	 1.spring整合JUnit技术
+	 2.dao测试接口与数据库是否正常连接
+	 3.service测试调用dao层
+	 4.通过postman插件测试Controller
+	 5.根据对象生成的关系表，用逆向工程生成相关代码
+4-logback日志
+	 
+
+5-商铺模块
+
+6-前端

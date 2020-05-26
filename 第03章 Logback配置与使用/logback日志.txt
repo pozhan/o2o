@@ -1,0 +1,80 @@
+logback日志
+
+1-主要模块
+	 1.logback-access: 主要作为一个与Servlet容器交互的模块，比如 tomcat或者jetty，提供一些与HTTP访问相关的功能
+	 2.logback-classic: 地位和作用等同于 Log4J，它也被认为是 Log4J 的一个改进版，并且它实现了简单日志门面 SLF4J
+	 3.logback-core 是其它模块的基础设施，其它模块基于它构建
+2-主要标签
+	 1.Logger：位于logback-classic模块中，定义日志类型，存放日志对象
+	 2.Appender：位于logback-core中，指定日志输出的目的地
+	 3.Layout：位于logback-core中，格式化日志输出
+3-logback设置
+	 1.	日志级别TRACE < DEBUG < INFO < WARN < ERROR
+	 2. 控制台，DEBUG，INFO，ERROR
+	 3. 
+	 <!--debug -->
+	<Appender name="debugAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!--文件路径 -->
+		<file>${log.filePath}/debug.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 文件名称 -->
+			<fileNamePattern>
+				${log.filePath}/debug/debug.%d{yyyy-MM-dd}.log.gz<!--gz自动压缩 -->
+			</fileNamePattern>
+			<!--文件最大历史保存数量 -->
+			<maxHistory>${log.maxHistory}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</Appender>
+	
+	 <logger neme="com.imooc.o2o" level="${log.level}" additivity="ture"><!--additivity开启继承父root输出到控制台的能力  -->
+		<appender-ref ref="debugAppender"/>
+		<appender-ref ref="infoAppender"/>
+		<appender-ref ref="errorAppender"/>
+	 </logger>
+	 <root level="info"><!--root是logger的父类，默认输出到控制台  -->
+		<appender-ref ref="consoleAppender"/>
+	 </root>
+4-一般在service和Controller层使用
+	 1.Logger logger = LoggerFactory.getLogger(AreaController.class);//获取日志对象
+	 logger.info("===start===");
+	 long startTime = System.currentTimeMillis();
+		。。。
+	 long endTime = System.currentTimeMillis();//测试看
+	 logger.debug("costTime:[{}ms]", endTime - startTime);
+	 logger.info("===end===");
+4-日志目录： CATALINA_BASE:         E:\EclipseSSM--Spring Boot\.metadata\.plugins\org.eclipse.wst.server.core\tmp0  
+	 配置<property name="log.filePath" value="${catalina.base}/logs/webapps"/>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

@@ -1,0 +1,7 @@
+第09章 前端展示系统
+
+1-头条读取及滚动播放和一级类别
+
+2-前端展示系统路径读取：在tomcat服务器中的server.xml文件配置
+<Context docBase="/Users/baidu/work/imge/upload" path="/upload" />
+docBase: 根路径

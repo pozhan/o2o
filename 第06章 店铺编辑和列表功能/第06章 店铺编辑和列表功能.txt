@@ -1,0 +1,9 @@
+店铺编辑和列表功能
+
+1-店铺编辑
+	 1.Dao需要查询和更新接口
+	   在ShopDao.xml中创建输出复合类型resultMap对应shop
+	 2.service:  更新店铺信息方法
+	 3.Controller：registerShop基础上修改
+
+2-店铺信息修改

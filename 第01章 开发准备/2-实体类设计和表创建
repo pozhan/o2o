@@ -1,0 +1,250 @@
+实体类设计和表创建
+O2O: 区域，用户信息--本地账号和微信账号，头条，店铺类别，店铺，商品类别，商品--图片详情
+(1)区域属性：
+		 1-ID
+		 2-名称
+		 3-权重
+		 4-创建时间
+		 5-修改时间
+	表创建 
+    mysql> create table `tb_area`(
+     `area_id`  int(2) NOT NULL AUTO_INCREMENT,
+     `area_name`  varchar(200) NOT NULL,
+     `priority` int(2) NOT NULL DEFAULT'0',
+     `create_time` datetime DEFAULT NULL,
+     `last_edit_time` datetime DEFAULT NULL,
+     primary key(`area_id`),
+     unique key `UK_AREA` (`area_name`)
+     )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+	
+(2)用户信息属性：
+		 1-ID
+		 2-名称
+		 3-性别
+		 4-头像
+		 5-邮箱
+		 6-状态：0:禁止使用本商城, 1:允许使用本商城
+		 7-身份标识：1顾客 2店家 3超级管理员
+		 8-创建时间
+		 9-修改时间
+	 表创建 
+	 create table `tb_person_info`(
+     `user_id` int(10) NOT NULL AUTO_INCREMENT,
+     `name` varchar(32) DEFAULT NULL,
+     `profile_img` varchar(1024)DEFAULT NULL,
+     `email` varchar(1024)DEFAULT NULL,
+     `gerder` varchar(2)DEFAULT NULL,
+     `enable_status` int(2) NOT NULL DEFAULT'0' comment'0:禁止使用本商城, 1:允许使用本商城',
+     `uesr_type` int(2) NOT NULL DEFAULT'1' comment'1:顾客, 2:店家, 3:超级管理员',
+     `create_time` datetime DEFAULT NULL,
+     `last_edit_time` datetime DEFAULT NULL,
+      primary key(`user_id`)
+     )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+	 
+(3)微信账号属性：
+		 1-ID
+		 2-用户ID--主外键
+		 3-创建时间
+		 4-绑定标识openID
+	表创建
+	 create table `tb_wechat_auth`(
+     `wechat_auth_id` int(10) NOT NULL AUTO_INCREMENT,
+	 `user_id` int(10) NOT NULL ,
+     `open_id` varchar(1024) NOT NULL ,
+     `create_time` datetime DEFAULT NULL,
+      primary key(`wechat_auth_id`),
+	  constraint `fk_wechat_profile` foreign key(`user_id`)references `tb_person_info`(`user_id`) 
+     )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+	 新增唯一索引：alter table tb_wechat_auth add unique index(open_id);
+	 
+(4)本地账号属性：
+		 1-ID
+		 2-用户ID--主外键
+		 3-用户名
+		 4-密码
+		 5-创建时间
+		 6-修改时间
+	表创建
+	 create table `tb_local_auth`(
+     `local_auth_id` int(10) NOT NULL AUTO_INCREMENT,
+	 `user_id` int(10) NOT NULL ,
+     `username` varchar(128) NOT NULL ,
+	 `password` varchar(128) NOT NULL ,
+     `create_time` datetime DEFAULT NULL,
+	 `last_edit_time` datetime DEFAULT NULL,
+      primary key(`local_auth_id`),
+	  unique key `uk_local_profile`(`username`),
+	  constraint `fk_localauth_profile` foreign key(`user_id`)references `tb_person_info`(`user_id`) 
+     )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+	
+(5)头条属性：
+		 1-ID
+		 2-名称
+		 3-权重
+		 4-状态：0不可用，1可用
+		 5-连接
+		 6-图片
+		 7-创建时间
+		 8-修改时间
+	表创建
+	 create table `tb_head_line`(
+     `line_id` int(100) NOT NULL AUTO_INCREMENT,
+     `line_name` varchar(1000) DEFAULT NULL ,
+	 `line_link` varchar(2000) NOT NULL ,
+	 `line_img` varchar(2000) NOT NULL ,
+	 `priority` int(2) DEFAULT NULL,
+	 `enable_status` int(2) NOT NULL DEFAULT'0',
+     `create_time` datetime DEFAULT NULL,
+	 `last_edit_time` datetime DEFAULT NULL,
+      primary key(`line_id`)	   
+     )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+	 **priority设定为NULL？？？
+(6)店铺类别属性：
+		 1-ID
+		 2-名称
+		 3-权重
+		 4-上级ID
+		 5-描述
+		 6-图片
+		 7-创建时间
+		 8-修改时间
+	表创建
+	 create table `tb_shop_category`(
+     `shop_category_id` int(11) NOT NULL AUTO_INCREMENT,
+     `shop_category_name` varchar(100) NOT NULL DEFAULT'',
+	 `shop_category_desc` varchar(1000) DEFAULT'',
+	 `shop_category_img` varchar(2000) DEFAULT NULL ,
+	 `priority` int(2) NOT NULL DEFAULT'0',
+	 `parent_id` int(11) DEFAULT NULL,
+     `create_time` datetime DEFAULT NULL,
+	 `last_edit_time` datetime DEFAULT NULL,
+      primary key(`shop_category_id`),	  
+	  constraint `fk_shop_category_self` foreign key(`parent_id`) references `tb_shop_category`(`shop_category_id`)
+     )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+(7)店铺属性：
+		 1-ID
+		 2-店名
+		 3-权重
+		 4-门面照
+		 5-描述
+		 6-联系方式
+		 7-地址		 
+		 8-区域ID
+		 9-类别ID
+		 10-用户ID
+		 11-状态 -1不可用 0审核中 1可用
+		 12-建议 超级管理员给店家的提醒
+		 13-创建时间
+		 14-修改时间
+		表创建
+		 create table `tb_shop`(
+		 `shop_id` int(10) NOT NULL AUTO_INCREMENT,
+		 `owner_id` int(10) NOT NULL COMMENT '店铺创建人',
+		 `area_id` int(5) DEFAULT NULL,
+		 `shop_category_id` int(11) DEFAULT NULL,
+		 `shop_name` varchar(256) NOT NULL,
+		 `shop_desc` varchar(1024) DEFAULT NULL,
+		 `shop_addr` varchar(200) DEFAULT NULL,
+		 `shop_img` varchar(1024) DEFAULT NULL,
+		 `phone` varchar(128) DEFAULT NULL,
+		 `priority` int(3) DEFAULT'0',
+		 `enable_status` int(2) NOT NULL DEFAULT'0',
+		 `create_time` datetime DEFAULT NULL,
+		 `last_edit_time` datetime DEFAULT NULL,
+		 `advice` varchar(255) DEFAULT NULL,
+		  primary key(`shop_id`),
+		  constraint `fk_shop_area` foreign key(`area_id`) references `tb_area`(`area_id`),
+		  constraint `fk_shop_profile` foreign key(`owner_id`) references `tb_person_info`(`user_id`),
+		  constraint `fk_shop_shopcate` foreign key(`shop_category_id`) references `tb_shop_category`(`shop_category_id`)
+		 )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+(8)商品类别属性：
+		 1-商品类别ID
+		 2-店铺ID
+		 3-商品类别名称
+		 4-权重
+		 5-创建时间
+	表创建
+	 create table `tb_product_category`(
+     `product_category_id` int(11) NOT NULL AUTO_INCREMENT,
+     `product_category_name` varchar(100) NOT NULL,
+	 `priority` int(2) DEFAULT'0',
+	 `shop_id` int(20) NOT NULL DEFAULT '0',
+     `create_time` datetime DEFAULT NULL,
+      primary key(`product_category_id`),	  
+	  constraint `fk_proate_shop` foreign key(`shop_id`) references `tb_shop`(`shop_id`)
+     )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+(9)商品属性：
+		1-商品ID
+		2-商品类别ID
+		3-店铺ID 
+		4-商品名 
+		5-描述
+		6-缩略图 
+		7-原价 		 
+		8-折扣价 
+		9-权重 
+		10-状态 0下架 1展示
+		11-创建时间
+		12-修改时间
+		13-图片详情列表
+	表创建
+		 create table `tb_product`(
+		 `product_id` int(100) NOT NULL AUTO_INCREMENT,
+		 `shop_id` int(20) NOT NULL DEFAULT'0',
+		 `product_category_id` int(11) DEFAULT NULL,
+		 `product_name` varchar(100) NOT NULL,
+		 `product_desc` varchar(2000) DEFAULT NULL,
+		 `img_addr` varchar(2000) DEFAULT '',
+		 `normal_price` varchar(100) DEFAULT NULL,
+		 `promotion_price` varchar(100) DEFAULT NULL,
+		 `priority` int(2) NOT NULL DEFAULT'0',
+		 `enable_status` int(2) NOT NULL DEFAULT'0',
+		 `create_time` datetime DEFAULT NULL,
+		 `last_edit_time` datetime DEFAULT NULL,
+		  primary key(`product_id`),
+		  constraint `fk_product_profile` foreign key(`product_category_id`) references `tb_product_category`(`product_category_id`),
+		  constraint `fk_product_shop` foreign key(`shop_id`) references `tb_shop`(`shop_id`)
+		 )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+		 
+(10)图片详情属性：
+		1-图片详情ID
+		2-连接地址
+		3-描述
+		4-权重
+		5-创建时间
+		6-商品ID
+	表创建
+	 create table `tb_product_img`(
+     `product_img_id` int(20) NOT NULL AUTO_INCREMENT,
+	 `img_addr` varchar(2000) NOT NULL,
+     `img_desc` varchar(2000) DEFAULT NULL,
+	 `priority` int(2) DEFAULT'0',
+	 `product_id` int(20) NOT NULL DEFAULT '0',
+     `create_time` datetime DEFAULT NULL,
+      primary key(`product_img_id`),	  
+	  constraint `fk_proimg_product` foreign key(`product_id`) references `tb_product`(`product_id`)
+     )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;	 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
